@@ -1,0 +1,126 @@
+{
+    "RecipeFormatVersion": "2020-01-25",
+    "ComponentName": "aws.greengrass.TensorFlowLiteImageClassification",
+    "ComponentVersion": "2.1.11",
+    "ComponentType": "aws.greengrass.generic",
+    "ComponentDescription": "Sample recipe - Image classification inference using TFlite runtime and mobilenet quantized model.",
+    "ComponentPublisher": "AWS",
+    "ComponentConfiguration": {
+        "DefaultConfiguration": {
+            "accessControl": {
+                "aws.greengrass.ipc.mqttproxy": {
+                    "aws.greengrass.TensorFlowLiteImageClassification:mqttproxy:1": {
+                        "policyDescription": "Allows access to publish via topic ml/tflite/image-classification.",
+                        "operations": [
+                            "aws.greengrass#PublishToIoTCore"
+                        ],
+                        "resources": [
+                            "ml/tflite/image-classification"
+                        ]
+                    }
+                }
+            },
+            "ImageName": "cat.jpeg",
+            "InferenceInterval": "3600",
+            "PublishResultsOnTopic": "ml/tflite/image-classification",
+            "ModelResourceKey": {
+                "model": "TensorFlowLite-Mobilenet"
+            }
+        }
+    },
+    "ComponentDependencies": {
+        "variant.TensorFlowLite": {
+            "VersionRequirement": ">=0.0.0",
+            "DependencyType": "HARD"
+        },
+        "variant.TensorFlowLite.ImageClassification.ModelStore": {
+            "VersionRequirement": ">=0.0.0",
+            "DependencyType": "HARD"
+        },
+        "aws.greengrass.Nucleus": {
+            "VersionRequirement": ">=0.0.0",
+            "DependencyType": "SOFT"
+        }
+    },
+    "Manifests": [
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "arm"
+            },
+            "Lifecycle": {
+                "setEnv": {
+                    "DEFAULT_TFLITE_IC_IMAGE_DIR": "{artifacts:decompressedPath}/aws.greengrass.TensorFlowLiteImageClassification/image_classification/sample_images/",
+                    "TFLITE_IC_MODEL_DIR": "{variant.TensorFlowLite.ImageClassification.ModelStore:artifacts:decompressedPath}/{configuration:/ModelResourceKey/model}/"
+                },
+                "run": {
+                    "RequiresPrivilege": "true",
+                    "script": "\n. {variant.TensorFlowLite:configuration:/MLRootPath}/greengrass_ml_tflite_venv/bin/activate\npython3 {artifacts:decompressedPath}/aws.greengrass.TensorFlowLiteImageClassification/image_classification/inference.py"
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://aws.greengrass.TensorFlowLiteImageClassification.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        },
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "amd64"
+            },
+            "Lifecycle": {
+                "setEnv": {
+                    "DEFAULT_TFLITE_IC_IMAGE_DIR": "{artifacts:decompressedPath}/aws.greengrass.TensorFlowLiteImageClassification/image_classification/sample_images/",
+                    "TFLITE_IC_MODEL_DIR": "{variant.TensorFlowLite.ImageClassification.ModelStore:artifacts:decompressedPath}/{configuration:/ModelResourceKey/model}/"
+                },
+                "run": {
+                    "RequiresPrivilege": "true",
+                    "script": "\nexport PATH=\"{variant.TensorFlowLite:configuration:/MLRootPath}/greengrass_ml_tflite_conda/bin:$PATH\"\neval \"$({variant.TensorFlowLite:configuration:/MLRootPath}/greengrass_ml_tflite_conda/bin/conda shell.bash hook)\"\nconda activate greengrass_ml_tflite_conda\nconda info --envs\npython3 {artifacts:decompressedPath}/aws.greengrass.TensorFlowLiteImageClassification/image_classification/inference.py"
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://aws.greengrass.TensorFlowLiteImageClassification.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        },
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "aarch64"
+            },
+            "Lifecycle": {
+                "setEnv": {
+                    "DEFAULT_TFLITE_IC_IMAGE_DIR": "{artifacts:decompressedPath}/aws.greengrass.TensorFlowLiteImageClassification/image_classification/sample_images/",
+                    "TFLITE_IC_MODEL_DIR": "{variant.TensorFlowLite.ImageClassification.ModelStore:artifacts:decompressedPath}/{configuration:/ModelResourceKey/model}/"
+                },
+                "run": {
+                    "RequiresPrivilege": "true",
+                    "script": "\n. {variant.TensorFlowLite:configuration:/MLRootPath}/greengrass_ml_tflite_venv/bin/activate\nTVM_TENSORRT_CACHE_DIR=/tmp python3 {artifacts:decompressedPath}/aws.greengrass.TensorFlowLiteImageClassification/image_classification/inference.py"
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://aws.greengrass.TensorFlowLiteImageClassification.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        }
+    ],
+    "Lifecycle": {}
+}
