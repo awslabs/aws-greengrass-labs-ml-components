@@ -1,0 +1,7 @@
+name: greengrass_ml_dlr_conda
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - opencv

@@ -1,7 +1,7 @@
 {
     "RecipeFormatVersion": "2020-01-25",
     "ComponentName": "aws.greengrass.TensorFlowliteObjectDetection",
-    "ComponentVersion": "2.1.11",
+    "ComponentVersion": "{COMPONENT_VERSION}",
     "ComponentType": "aws.greengrass.generic",
     "ComponentDescription": "Sample recipe - Object detection inference using TFlite runtime and ssd(mobilenet v1) quantized model.",
     "ComponentPublisher": "AWS",

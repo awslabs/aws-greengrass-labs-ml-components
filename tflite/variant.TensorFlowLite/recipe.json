@@ -1,7 +1,7 @@
 {
     "RecipeFormatVersion": "2020-01-25",
     "ComponentName": "variant.TensorFlowLite",
-    "ComponentVersion": "2.5.15",
+    "ComponentVersion": "{COMPONENT_VERSION}",
     "ComponentType": "aws.greengrass.generic",
     "ComponentDescription": "TFLite is a runtime for ML models on mobile, embedded, and IoT devices to enable inference with low latency and a small binary size.",
     "ComponentPublisher": "AWS",
