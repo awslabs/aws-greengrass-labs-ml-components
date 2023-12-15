@@ -1,7 +1,7 @@
 {
     "RecipeFormatVersion": "2020-01-25",
     "ComponentName": "aws.greengrass.TensorFlowLiteImageClassification",
-    "ComponentVersion": "2.1.11",
+    "ComponentVersion": "{COMPONENT_VERSION}",
     "ComponentType": "aws.greengrass.generic",
     "ComponentDescription": "Sample recipe - Image classification inference using TFlite runtime and mobilenet quantized model.",
     "ComponentPublisher": "AWS",
