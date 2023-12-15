@@ -1,7 +1,7 @@
 {
     "component": {
         "aws.greengrass.TensorFlowLiteImageClassification": {
-            "author": "Me",
+            "author": "<PLACEHOLDER_AUTHOR>",
             "version": "NEXT_PATCH",
             "build": {
                 "build_system": "zip",

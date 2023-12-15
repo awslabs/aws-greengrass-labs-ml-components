@@ -1,0 +1,120 @@
+{
+    "RecipeFormatVersion": "2020-01-25",
+    "ComponentName": "variant.DLR",
+    "ComponentVersion": "{COMPONENT_VERSION}",
+    "ComponentType": "aws.greengrass.generic",
+    "ComponentDescription": "DLR is a compact, common runtime for deep learning models and decision tree models compiled by SageMaker Neo, TVM, or Treelite.",
+    "ComponentPublisher": "AWS",
+    "ComponentConfiguration": {
+        "DefaultConfiguration": {
+            "MLRootPath": "../variant.DLR/greengrass_ml",
+            "WindowsMLRootPath": "%cd%\\..\\variant.DLR\\greengrass_ml",
+            "UseInstaller": "true"
+        }
+    },
+    "ComponentDependencies": {
+        "aws.greengrass.Nucleus": {
+            "VersionRequirement": ">=2.0.0 <2.13.0",
+            "DependencyType": "SOFT"
+        }
+    },
+    "Manifests": [
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "arm"
+            },
+            "Lifecycle": {
+                "install": {
+                    "RequiresPrivilege": "true",
+                    "script": "\nbash {artifacts:decompressedPath}/variant.DLR/installer/installer.sh -p {configuration:/MLRootPath} -i {configuration:/UseInstaller}",
+                    "timeout": "900"
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://variant.DLR.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        },
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "amd64"
+            },
+            "Lifecycle": {
+                "install": {
+                    "RequiresPrivilege": "true",
+                    "Setenv": {
+                        "LANGUAGE": "en_US.UTF-8",
+                        "LC_ALL": "en_US.UTF-8",
+                        "LANG": "en_US.UTF-8"
+                    },
+                    "script": "\nbash {artifacts:decompressedPath}/variant.DLR/installer/installer.sh -p {configuration:/MLRootPath} -e {artifacts:decompressedPath}/variant.DLR/environment.yaml -i {configuration:/UseInstaller}",
+                    "timeout": "900"
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://variant.DLR.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        },
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "aarch64"
+            },
+            "Lifecycle": {
+                "install": {
+                    "RequiresPrivilege": "true",
+                    "script": "\nbash {artifacts:decompressedPath}/variant.DLR/installer/installer.sh -p {configuration:/MLRootPath} -i {configuration:/UseInstaller}",
+                    "timeout": "900"
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://variant.DLR.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        },
+        {
+            "Platform": {
+                "os": "windows",
+                "architecture": "*"
+            },
+            "Lifecycle": {
+                "install": {
+                    "script": "{artifacts:decompressedPath}/variant.DLR/installer/installer.bat {artifacts:decompressedPath}/variant.DLR/environment.yaml {configuration:/WindowsMLRootPath} {configuration:/UseInstaller}",
+                    "timeout": "900"
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://variant.DLR.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        }
+    ],
+    "Lifecycle": {}
+}

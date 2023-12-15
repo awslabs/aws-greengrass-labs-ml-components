@@ -1,6 +1,6 @@
 {
     "component": {
-        "aws.greengrass.TensorFlowLiteObjectDetection": {
+        "variant.DLR": {
             "author": "<PLACEHOLDER_AUTHOR>",
             "version": "NEXT_PATCH",
             "build": {

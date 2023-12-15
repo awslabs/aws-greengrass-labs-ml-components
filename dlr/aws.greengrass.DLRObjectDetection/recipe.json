@@ -1,0 +1,151 @@
+{
+    "RecipeFormatVersion": "2020-01-25",
+    "ComponentName": "aws.greengrass.DLRObjectDetection",
+    "ComponentVersion": "{COMPONENT_VERSION}",
+    "ComponentType": "aws.greengrass.generic",
+    "ComponentDescription": "Sample recipe - Object detection inference using DLR and the yolo3 darknet voc model.",
+    "ComponentPublisher": "AWS",
+    "ComponentConfiguration": {
+        "DefaultConfiguration": {
+            "accessControl": {
+                "aws.greengrass.ipc.mqttproxy": {
+                    "aws.greengrass.DLRObjectDetection:mqttproxy:1": {
+                        "policyDescription": "Allows access to publish via topic ml/dlr/object-detection.",
+                        "operations": [
+                            "aws.greengrass#PublishToIoTCore"
+                        ],
+                        "resources": [
+                            "ml/dlr/object-detection"
+                        ]
+                    }
+                }
+            },
+            "ImageName": "objects.jpg",
+            "InferenceInterval": "3600",
+            "PublishResultsOnTopic": "ml/dlr/object-detection",
+            "ModelResourceKey": {
+                "armv7l": "DLR-yolo3-armv7l-cpu-ObjectDetection",
+                "aarch64": "DLR-yolo3-aarch64-cpu-ObjectDetection",
+                "x86_64": "DLR-yolo3-x86_64-cpu-ObjectDetection",
+                "windows": "DLR-yolo3-win-cpu-ObjectDetection"
+            }
+        }
+    },
+    "ComponentDependencies": {
+        "variant.DLR.ObjectDetection.ModelStore": {
+            "VersionRequirement": ">=0.0.0",
+            "DependencyType": "HARD"
+        },
+        "variant.DLR": {
+            "VersionRequirement": ">=0.0.0",
+            "DependencyType": "HARD"
+        }
+    },
+    "Manifests": [
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "arm"
+            },
+            "Lifecycle": {
+                "setEnv": {
+                    "DLR_OD_MODEL_DIR": "{variant.DLR.ObjectDetection.ModelStore:artifacts:decompressedPath}/{configuration:/ModelResourceKey/armv7l}",
+                    "DEFAULT_DLR_OD_IMAGE_DIR": "{artifacts:decompressedPath}/aws.greengrass.DLRObjectDetection/object_detection/sample_images/"
+                },
+                "run": {
+                    "RequiresPrivilege": "true",
+                    "script": "\n. {variant.DLR:configuration:/MLRootPath}/greengrass_ml_dlr_venv/bin/activate\npython3 {artifacts:decompressedPath}/aws.greengrass.DLRObjectDetection/object_detection/inference.py "
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://aws.greengrass.DLRObjectDetection.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        },
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "amd64"
+            },
+            "Lifecycle": {
+                "setEnv": {
+                    "DLR_OD_MODEL_DIR": "{variant.DLR.ObjectDetection.ModelStore:artifacts:decompressedPath}/{configuration:/ModelResourceKey/x86_64}",
+                    "DEFAULT_DLR_OD_IMAGE_DIR": "{artifacts:decompressedPath}/aws.greengrass.DLRObjectDetection/object_detection/sample_images/"
+                },
+                "run": {
+                    "RequiresPrivilege": "true",
+                    "script": "\nexport PATH=\"{variant.DLR:configuration:/MLRootPath}/greengrass_ml_dlr_conda/bin:$PATH\"\neval \"$({variant.DLR:configuration:/MLRootPath}/greengrass_ml_dlr_conda/bin/conda shell.bash hook)\"\nconda activate greengrass_ml_dlr_conda\npython3 {artifacts:decompressedPath}/aws.greengrass.DLRObjectDetection/object_detection/inference.py "
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://aws.greengrass.DLRObjectDetection.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        },
+        {
+            "Platform": {
+                "os": "linux",
+                "architecture": "aarch64"
+            },
+            "Lifecycle": {
+                "setEnv": {
+                    "DLR_OD_MODEL_DIR": "{variant.DLR.ObjectDetection.ModelStore:artifacts:decompressedPath}/{configuration:/ModelResourceKey/aarch64}",
+                    "DEFAULT_DLR_OD_IMAGE_DIR": "{artifacts:decompressedPath}/aws.greengrass.DLRObjectDetection/object_detection/sample_images/"
+                },
+                "run": {
+                    "RequiresPrivilege": "true",
+                    "script": "\n. {variant.DLR:configuration:/MLRootPath}/greengrass_ml_dlr_venv/bin/activate\nTVM_TENSORRT_CACHE_DIR=/tmp python3 {artifacts:decompressedPath}/aws.greengrass.DLRObjectDetection/object_detection/inference.py"
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://aws.greengrass.DLRObjectDetection.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        },
+        {
+            "Platform": {
+                "os": "windows",
+                "architecture": "*"
+            },
+            "Lifecycle": {
+                "setEnv": {
+                    "DLR_OD_MODEL_DIR": "{variant.DLR.ObjectDetection.ModelStore:artifacts:decompressedPath}/{configuration:/ModelResourceKey/windows}",
+                    "DEFAULT_DLR_OD_IMAGE_DIR": "{artifacts:decompressedPath}/aws.greengrass.DLRObjectDetection/object_detection/sample_images/"
+                },
+                "run": {
+                    "RequiresPrivilege": "true",
+                    "script": "{variant.DLR:configuration:/WindowsMLRootPath}\\Library\\bin\\conda activate {variant.DLR:configuration:/WindowsMLRootPath}\\envs\\greengrass_ml_dlr_conda && python -u {artifacts:decompressedPath}/aws.greengrass.DLRObjectDetection/object_detection/inference.py"
+                }
+            },
+            "Artifacts": [
+                {
+                    "Uri": "s3://aws.greengrass.DLRObjectDetection.zip",
+                    "Unarchive": "ZIP",
+                    "Permission": {
+                        "Read": "OWNER",
+                        "Execute": "NONE"
+                    }
+                }
+            ]
+        }
+    ],
+    "Lifecycle": {}
+}

@@ -1,6 +1,6 @@
 {
     "component": {
-        "aws.greengrass.TensorFlowLiteObjectDetection": {
+        "aws.greengrass.DLRImageClassification": {
             "author": "<PLACEHOLDER_AUTHOR>",
             "version": "NEXT_PATCH",
             "build": {
